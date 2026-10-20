@@ -1,0 +1,20 @@
+{
+  "name": "Арсенал",
+  "short_name": "Арсенал",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0a07",
+  "theme_color": "#0d0a07",
+  "icons": [
+    {
+      "src": "https://api.iconify.design/game-icons:lightning-helix.svg?color=%238cb8d4",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "https://api.iconify.design/game-icons:lightning-helix.svg?color=%238cb8d4",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

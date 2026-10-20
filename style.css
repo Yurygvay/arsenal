@@ -1,0 +1,461 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0a07;
+  --surface: #1a1510;
+  --surface-2: #241d16;
+  --border: #3a2c1f;
+  --border-strong: #5c442e;
+  
+  --text: #e0d8c8;
+  --text-dim: #9c8e7a;
+  
+  --power: #8cb8d4; /* Магический голубой */
+  --power-glow: rgba(140, 184, 212, 0.4);
+  
+  --gold: #d4a744;
+  --gold-bright: #f2cf6b;
+  
+  --danger: #a83c3c;
+  --radius: 12px;
+}
+
+body {
+  background-color: var(--bg);
+  /* Текстура сцены с легким свечением */
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(92, 68, 46, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 10% 90%, rgba(212, 167, 68, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1, h2, h3, .header__name, .hero__value, .btn {
+  font-family: 'Cinzel', serif;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ---------- Иконки ---------- */
+.icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; flex-shrink: 0; }
+.icon-power { color: var(--power); filter: drop-shadow(0 0 4px var(--power-glow)); }
+.icon-gold  { color: var(--gold); }
+
+/* ---------- Шапка ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid var(--border-strong);
+  margin-bottom: 20px;
+}
+.header__brand { display: flex; align-items: center; gap: 10px; }
+.header__logo { width: 26px; height: 26px; color: var(--power); filter: drop-shadow(0 0 8px var(--power-glow)); }
+.header__name { font-size: 20px; font-weight: 700; letter-spacing: 0.06em; color: var(--gold-bright); text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+.header__actions { display: flex; gap: 8px; align-items: center; }
+
+.wallet-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--surface);
+  border: 1px solid var(--gold-dim);
+  border-radius: 20px;
+  cursor: pointer;
+  color: var(--gold-bright);
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  transition: all 0.2s;
+}
+.wallet-chip:hover { border-color: var(--gold); background: var(--surface-2); }
+.wallet-chip .icon { width: 16px; height: 16px; }
+
+.icon-btn {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.icon-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+.icon-btn .icon { width: 18px; height: 18px; }
+.icon-btn--sm { width: 28px; height: 28px; border-radius: 6px; }
+.icon-btn--sm .icon { width: 14px; height: 14px; }
+
+.main { padding-bottom: 110px; }
+
+/* ---------- ГРАФ (Обсидиан) ---------- */
+.graph-container {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  background: radial-gradient(circle at center, #151a24 0%, #0a0c10 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+}
+.graph-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.graph-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: #fff;
+  text-align: center;
+  cursor: default;
+  transition: all 0.3s ease;
+}
+.graph-node--core {
+  width: 40px; height: 40px;
+  background: var(--power);
+  box-shadow: 0 0 20px var(--power-glow), inset 0 0 10px #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+.graph-node--dept {
+  background: #2c3e50;
+  border: 1px solid #4a6a85;
+  box-shadow: 0 0 10px rgba(74, 106, 133, 0.3);
+}
+.graph-node--skill {
+  background: #3e2723;
+  border: 1px solid #6d4c41;
+}
+.graph-node span {
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  white-space: nowrap;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-shadow: 0 1px 2px #000;
+}
+
+/* ---------- Главный герой ---------- */
+.hero { padding: 0 0 20px; }
+.hero__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hero__card {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 16px;
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+.hero__card--power { border-top: 2px solid var(--power-dim); }
+.hero__card--gold  { border-top: 2px solid var(--gold-dim); }
+
+.hero__label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.hero__value {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.hero__card--power .hero__value { color: var(--power); text-shadow: 0 0 15px var(--power-glow); }
+.hero__card--gold .hero__value { color: var(--gold-bright); text-shadow: 0 0 15px rgba(212,167,68,0.3); }
+.hero__sub { font-size: 13px; color: var(--text-dim); margin-top: 8px; font-style: italic; }
+.hero__sub strong { color: var(--text); font-weight: 600; }
+
+/* ---------- Секции ---------- */
+.section { margin-top: 24px; }
+.section__title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--gold-dim);
+  margin-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+.section__title span:last-child { font-size: 12px; color: var(--text-dim); }
+
+/* ---------- Отделы (Пергамент) ---------- */
+.dept {
+  background: linear-gradient(135deg, #e8dcc4 0%, #d4c4a8 100%);
+  color: #2b1f16;
+  border: 1px solid #8b6a1f;
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 0 20px rgba(139, 106, 31, 0.1);
+  position: relative;
+}
+/* Декоративные гвоздики */
+.dept::before, .dept::after {
+  content: ''; position: absolute; width: 6px; height: 6px;
+  background: #5c442e; border-radius: 50%; box-shadow: inset 0 1px 2px #000;
+}
+.dept::before { top: 6px; left: 6px; }
+.dept::after { top: 6px; right: 6px; }
+
+.dept:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.6), inset 0 0 20px rgba(139, 106, 31, 0.2); }
+.dept__row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.dept__name { font-family: 'Cinzel', serif; font-weight: 700; font-size: 15px; color: #1a1005; }
+.dept__power { font-weight: 700; color: #4a3a24; display: inline-flex; align-items: center; gap: 4px; }
+.dept__power .icon { color: #4a3a24; }
+
+.bar { height: 3px; background: rgba(0,0,0,0.2); border-radius: 2px; overflow: hidden; }
+.bar__fill { height: 100%; background: #4a3a24; transition: width 0.4s ease; }
+
+/* ---------- Квесты ---------- */
+.action {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.action:hover { background: var(--surface-2); border-left-color: var(--power); }
+.action__main { flex: 1; min-width: 0; }
+.action__desc { font-weight: 600; color: var(--text); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.action__meta { font-size: 13px; color: var(--text-dim); margin-top: 2px; font-style: italic; }
+.action__rewards { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; }
+.action__rewards .r-power { color: var(--power); display: inline-flex; align-items: center; gap: 4px; }
+.action__rewards .r-gold { color: var(--gold); display: inline-flex; align-items: center; gap: 4px; }
+
+.empty {
+  color: var(--text-dim); font-size: 15px; padding: 24px; text-align: center;
+  background: var(--surface); border: 1px dashed var(--border-strong); border-radius: 4px; font-style: italic;
+}
+
+/* ---------- FAB ---------- */
+.fab {
+  position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); right: 24px;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #f2cf6b, #b8872d);
+  color: #1a1005; border: 2px solid #5c442e; font-size: 32px; cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.5);
+  transition: all 0.15s; font-weight: 300;
+  display: flex; align-items: center; justify-content: center; padding-bottom: 4px;
+}
+.fab:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.7); }
+.fab:active { transform: scale(0.95); }
+
+/* ---------- Модалки ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(5, 3, 1, 0.85); backdrop-filter: blur(3px);
+  display: flex; align-items: flex-end; justify-content: center; z-index: 100;
+}
+@media (min-width: 600px) { .modal-overlay { align-items: center; padding: 20px; } }
+
+.modal {
+  background: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, rgba(58, 44, 31, 0.4) 0%, transparent 70%);
+  border: 1px solid var(--gold-dim);
+  border-radius: 12px 12px 0 0;
+  padding: 24px;
+  width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+@media (min-width: 600px) { .modal { border-radius: 12px; } }
+
+.modal__title { font-size: 22px; color: var(--gold-bright); margin-bottom: 20px; text-align: center; text-shadow: 0 2px 4px #000; }
+.modal__text { color: var(--text-dim); font-size: 15px; margin-bottom: 16px; text-align: center; font-style: italic; }
+.modal__actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; flex-wrap: wrap; }
+
+/* ---------- Формы ---------- */
+.form { display: flex; flex-direction: column; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field__label { font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold-dim); letter-spacing: 0.05em; }
+.input {
+  background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 6px;
+  padding: 12px; color: var(--text); font-size: 16px; font-family: inherit; width: 100%;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+.input:focus { outline: none; border-color: var(--gold); }
+.input:disabled { opacity: 0.5; }
+
+.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chip {
+  background: var(--surface); border: 1px solid var(--border-strong);
+  color: var(--text-dim); padding: 12px 8px; border-radius: 6px; cursor: pointer;
+  font-family: inherit; transition: all 0.15s; text-align: center;
+}
+.chip strong { display: block; font-family: 'Cinzel', serif; color: var(--text); font-size: 14px; margin-bottom: 4px; }
+.chip small { display: flex; justify-content: center; gap: 8px; font-size: 12px; font-family: 'EB Garamond', serif; }
+.chip small .p { color: var(--power); }
+.chip small .g { color: var(--gold); }
+.chip:hover { border-color: var(--gold-dim); }
+.chip--active { background: rgba(212, 167, 68, 0.1); border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 167, 68, 0.2); }
+
+.dual-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn {
+  padding: 12px 20px; border-radius: 6px; border: 1px solid var(--border-strong);
+  background: var(--surface-2); color: var(--text); font-size: 14px; font-family: 'Cinzel', serif;
+  cursor: pointer; transition: all 0.15s; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+.btn:hover { background: #362b20; }
+.btn--primary { background: linear-gradient(to bottom, #5c442e, #3a2c1f); color: var(--gold-bright); border-color: var(--gold-dim); }
+.btn--primary:hover { filter: brightness(1.2); }
+.btn--gold { background: linear-gradient(to bottom, #b8872d, #8b6a1f); color: #1a1005; border-color: #f2cf6b; font-weight: 700; }
+.btn--danger { color: #ff6b6b; border-color: #a83c3c; background: rgba(168, 60, 60, 0.1); }
+.btn--ghost { background: transparent; border-style: dashed; }
+.btn--sm { padding: 8px 12px; font-size: 12px; }
+
+/* ---------- Магазин и настройки ---------- */
+.shop-balance { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 0 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.shop-balance .icon { width: 28px; height: 28px; }
+.shop-balance__value { font-family: 'Cinzel', serif; font-size: 28px; font-weight: 700; color: var(--gold-bright); text-shadow: 0 0 10px rgba(212,167,68,0.3); }
+
+.shop-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 10px; }
+.shop-item--unaffordable { opacity: 0.5; }
+.shop-item__main { flex: 1; }
+.shop-item__name { font-weight: 600; font-size: 15px; }
+.shop-item__price { font-size: 13px; color: var(--gold); display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; }
+
+.active-perm { display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(140, 184, 212, 0.08); border: 1px solid var(--power-dim); border-radius: 6px; margin-bottom: 8px; }
+.active-perm__main { flex: 1; }
+.active-perm__name { font-weight: 600; color: var(--power); }
+
+.settings-section { margin-bottom: 28px; }
+.settings-title { font-family: 'Cinzel', serif; font-size: 14px; color: var(--gold-dim); margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+.diff-row { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 8px; align-items: center; margin-bottom: 8px; }
+.diff-row__label { font-size: 13px; color: var(--text-dim); }
+.diff-row input { padding: 8px; font-size: 14px; }
+
+.manage-dept { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+.manage-dept__head { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.manage-dept__name { flex: 1; font-weight: 600; }
+.manage-skills { display: flex; flex-direction: column; gap: 4px; padding-left: 12px; border-left: 1px dashed var(--border-strong); }
+.manage-skill { display: flex; align-items: center; gap: 6px; padding: 4px 0; font-size: 14px; color: var(--text-dim); }
+.manage-skill span:first-child { flex: 1; }
+.manage-skill--row { padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text); }
+
+/* =========================================
+   ДЕСКТОПНЫЙ РЕЖИМ (16:9) и КРУПНЫЕ ШРИФТЫ
+   ========================================= */
+
+/* Увеличиваем базовый шрифт */
+body { font-size: 18px; } 
+
+/* Сетка для двух колонок (сработает на экранах шире 1000px) */
+@media (min-width: 1000px) {
+  .app { max-width: 1300px; }
+  .desktop-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; /* Две равные колонки */
+    gap: 40px; 
+    align-items: start;
+  }
+  .graph-container { height: 400px; } /* Граф становится больше в высоту */
+  .hero__value { font-size: 52px; } /* Цифры силы/золота еще крупнее */
+  .section__title { font-size: 18px; }
+}
+
+/* --- УВЕЛИЧИВАЕМ ВООБЩЕ ВСЕ ШРИФТЫ --- */
+
+/* Карточки баланса */
+.hero__label { font-size: 15px; }
+.hero__sub { font-size: 16px; }
+
+/* Заголовки (Отделы, Последние квесты) */
+.section__title { font-size: 18px; }
+.section__title span:last-child { font-size: 16px; }
+
+/* Карточки отделов (те, что на пергаменте) */
+.dept__name { font-size: 20px; font-weight: 700; }
+.dept__power { font-size: 18px; }
+
+/* Список квестов */
+.action__desc { font-size: 18px; }
+.action__meta { font-size: 16px; } /* Серый текст */
+.action__rewards { font-size: 17px; }
+
+/* Формы и кнопки */
+.field__label { font-size: 15px; }
+.input { font-size: 18px; } /* Текст, который ты вводишь */
+.chip strong { font-size: 18px; }
+.chip small { font-size: 15px; }
+.btn { font-size: 17px; }
+.btn--sm { font-size: 15px; }
+
+/* Пустые заглушки */
+.empty { font-size: 18px; }
+
+/* Настройки */
+.settings-title { font-size: 18px; }
+.diff-row__label { font-size: 17px; }
+.manage-skill { font-size: 17px; }
+.manage-dept__name { font-size: 18px; }
+
+/* Магазин */
+.shop-item__name { font-size: 18px; }
+.shop-item__price { font-size: 16px; }
+.active-perm__name { font-size: 18px; }
+.active-perm .action__meta { font-size: 16px; }
+
+/* Граф */
+.graph-node span { font-size: 14px; font-weight: 700; }
+
+/* =========================================
+   МАКСИМАЛЬНАЯ ЧИТАЕМОСТЬ МЕЛКОГО ТЕКСТА
+   ========================================= */
+
+/* Текст под цифрами силы и золота */
+.hero__sub {
+  font-size: 18px;          /* Увеличиваем размер */
+  font-style: normal;       /* Убираем надоедливый курсив */
+  color: #c5bcae;           /* Делаем цвет светлее */
+  margin-top: 12px;
+}
+.hero__sub strong {
+  font-size: 19px;          /* Сами цифры делаем еще чуть крупнее */
+}
+
+/* Текст в пустом списке квестов */
+.empty {
+  font-size: 20px;          /* Заметно крупнее */
+  font-style: normal;       /* Убираем курсив */
+  color: #c5bcae;
+  padding: 30px 20px;       /* Чуть больше воздуха внутри рамки */
+  line-height: 1.6;
+}
+
+/* Даты и категории под квестами (серый текст) */
+.action__meta {
+  font-size: 17px;
+  font-style: normal;       /* Убираем курсив */
+  color: #b8afa0;           /* Немного светлее */
+  margin-top: 4px;
+}
